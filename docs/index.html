@@ -12,6 +12,17 @@
     }
   </style>
   <script>
+    const EXERCISES = [
+      'Canoeing',
+      'Reverse cork scews',
+      'Upper circle crunch',
+      'Side crunch',
+      'X-man plank',
+      'Heals to the heavens',
+      'Frog crunches',
+      'Pendulum planks',
+    ]
+
     // From https://stackoverflow.com/a/19270021/369171
     function getRandom(arr, n) {
       var result = new Array(n),
@@ -27,15 +38,15 @@
       return result;
     }
 
-    function findElements(selector) {
-      return Array.from(document.querySelectorAll(selector))
-    }
-
     window.addEventListener('load', () => {
-      let elements = findElements('#exercise-list > li')
-      let randomFive = getRandom(elements, 5)
-      console.log(randomFive.map(e => e.innerHTML))
-      randomFive.forEach(elem => elem.classList.add('selected'))
+      let parent = document.querySelector('#exercise-list')
+      let selectedExercises = getRandom(EXERCISES, 5)
+
+      selectedExercises.forEach(exerciseName => {
+        let newLi = document.createElement('li')
+        newLi.innerHTML = exerciseName
+        parent.appendChild(newLi)
+      })
     })
   </script>
 </head>
@@ -43,14 +54,6 @@
   <main>
     <p>Today's 5 exercises:</p>
     <ol id="exercise-list">
-      <li>Canoeing</li>
-      <li>Reverse cork scews</li>
-      <li>Upper circle crunch</li>
-      <li>Side crunch</li>
-      <li>X-man plank</li>
-      <li>Heals to the heavens</li>
-      <li>Frog crunches</li>
-      <li>Pendulum planks</li>
     </ol>
   </main>
   <footer>
