@@ -23,30 +23,35 @@
       'Pendulum planks',
     ]
 
-    // From https://stackoverflow.com/a/19270021/369171
-    function getRandom(arr, n) {
-      var result = new Array(n),
-        len = arr.length,
-        taken = new Array(len);
-      if (n > len)
-        throw new RangeError("getRandom: more elements taken than available");
-      while (n--) {
-        var x = Math.floor(Math.random() * len);
-        result[n] = arr[x in taken ? taken[x] : x];
-        taken[x] = --len;
+    // From https://stackoverflow.com/a/6274381/369171
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
       }
-      return result;
+      return a;
     }
 
     window.addEventListener('load', () => {
       let parent = document.querySelector('#exercise-list')
-      let selectedExercises = getRandom(EXERCISES, 5)
+      let refresh = document.querySelector('#refresh')
 
-      selectedExercises.forEach(exerciseName => {
-        let newLi = document.createElement('li')
-        newLi.innerHTML = exerciseName
-        parent.appendChild(newLi)
-      })
+      let refreshSelection = () => {
+        while(parent.firstChild) { parent.removeChild(parent.firstChild) }
+
+        let selectedExercises = EXERCISES.map(e => e)
+        shuffle(selectedExercises)
+
+        selectedExercises.slice(0, 5).forEach(exerciseName => {
+          let newLi = document.createElement('li')
+          newLi.innerHTML = exerciseName
+          parent.appendChild(newLi)
+        })
+      }
+
+      refresh.addEventListener('click', refreshSelection)
+
+      refreshSelection()
     })
   </script>
 </head>
@@ -55,6 +60,7 @@
     <p>Today's 5 exercises:</p>
     <ol id="exercise-list">
     </ol>
+    <button id="refresh">Refresh</button>
   </main>
   <footer>
     <a href="https://youtu.be/drJ-D_uURIc">ATHLEAN-X: The "Hour a Week" Ab Workout (FOLLOW ALONG!)</a>
