@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .selected {
+      text-decoration: underline;
+      font-weight: bold;
+    }
+  </style>
+  <script>
+    // From https://stackoverflow.com/a/19270021/369171
+    function getRandom(arr, n) {
+      var result = new Array(n),
+        len = arr.length,
+        taken = new Array(len);
+      if (n > len)
+        throw new RangeError("getRandom: more elements taken than available");
+      while (n--) {
+        var x = Math.floor(Math.random() * len);
+        result[n] = arr[x in taken ? taken[x] : x];
+        taken[x] = --len;
+      }
+      return result;
+    }
+
+    function findElements(selector) {
+      return Array.from(document.querySelectorAll(selector))
+    }
+
+    window.addEventListener('load', () => {
+      let elements = findElements('#exercise-list > li')
+      let randomFive = getRandom(elements, 5)
+      console.log(randomFive.map(e => e.innerHTML))
+      randomFive.forEach(elem => elem.classList.add('selected'))
+    })
+  </script>
+</head>
+<body>
+  <main>
+    <p>Today's 5 exercises:</p>
+    <ol id="exercise-list">
+      <li>Canoeing</li>
+      <li>Reverse cork scews</li>
+      <li>Upper circle crunch</li>
+      <li>Side crunch</li>
+      <li>X-man plank</li>
+      <li>Heals to the heavens</li>
+      <li>Frog crunches</li>
+      <li>Pendulum planks</li>
+    </ol>
+  </main>
+  <footer>
+    <a href="https://youtu.be/drJ-D_uURIc">ATHLEAN-X: The "Hour a Week" Ab Workout (FOLLOW ALONG!)</a>
+  </footer>
+</body>
+</html>
