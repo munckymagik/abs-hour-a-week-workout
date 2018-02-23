@@ -1,0 +1,11 @@
+main {
+  font-size: 20pt;
+  margin-bottom: 1em;
+}
+.selected {
+  text-decoration: underline;
+  font-weight: bold;
+}
+.big-button {
+  font-size: 2em;
+}
