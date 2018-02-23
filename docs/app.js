@@ -8,7 +8,7 @@ var app = (context) => {
     return a;
   }
 
-  let newRefreshSelection = (exercises, parent) => () => {
+  let newSelectionRandomizer = (exercises, parent) => () => {
     while (parent.firstChild) { parent.removeChild(parent.firstChild) }
 
     let selectedExercises = exercises.map(e => e)
@@ -23,12 +23,12 @@ var app = (context) => {
 
   let init = (exercises) => {
     let parent = document.querySelector('#exercise-list')
-    let refresh = document.querySelector('#refresh')
-    let refreshSelection = newRefreshSelection(exercises, parent)
+    let randomize = document.querySelector('#randomize')
+    let randomizeSelection = newSelectionRandomizer(exercises, parent)
 
-    refresh.addEventListener('click', refreshSelection)
+    randomize.addEventListener('click', randomizeSelection)
 
-    refreshSelection()
+    randomizeSelection()
   }
 
   return {
