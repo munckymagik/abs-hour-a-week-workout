@@ -1,6 +1,6 @@
 const app = () => {
   interface IExerciseSet {
-    readonly type: string;
+    readonly title: string;
     readonly nodes: string;
     readonly choices: string[];
   }
@@ -40,7 +40,7 @@ const app = () => {
 
     exerciseSets.forEach((exerciseSet, index) => {
       const newOpt = document.createElement("option");
-      newOpt.innerHTML = exerciseSet.type;
+      newOpt.innerHTML = exerciseSet.title;
       newOpt.setAttribute("value", index.toString());
 
       selectElem.appendChild(newOpt);

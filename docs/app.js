@@ -30,7 +30,7 @@ const app = () => {
         clearChildren(selectElem);
         exerciseSets.forEach((exerciseSet, index) => {
             const newOpt = document.createElement("option");
-            newOpt.innerHTML = exerciseSet.type;
+            newOpt.innerHTML = exerciseSet.title;
             newOpt.setAttribute("value", index.toString());
             selectElem.appendChild(newOpt);
         });

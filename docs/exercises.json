@@ -1,6 +1,6 @@
 [
   {
-    "type": "abs",
+    "title": "Abs - hardgainer set",
     "notes": "Based on <a href=\"https: //youtu.be/drJ-D_uURIc\">ATHLEAN-X: The \"Hour a Week\" Ab Workout (FOLLOW ALONG!)</a>",
     "choices": [
       "Canoeing",
@@ -15,7 +15,7 @@
     ]
   },
   {
-    "type": "back",
+    "title": "Back",
     "notes": "Based on <a href=\"https://youtu.be/ydT74SAts7M\">How to Get a Stronger Lower Back (WITHOUT WEIGHTS!)</a>",
     "choices": [
       "Knees out hip extensions",
