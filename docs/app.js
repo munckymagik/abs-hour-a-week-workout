@@ -23,18 +23,39 @@ const app = () => {
             parent.appendChild(newLi);
         });
     };
-    const init = (exercises) => {
-        const parent = document.querySelector("#exercise-list");
-        if (null === parent) {
-            throw new Error("Could not locate #exercise-list element");
-        }
-        const randomize = document.querySelector("#randomize");
-        if (null === randomize) {
-            throw new Error("Could not locate #randomize element");
-        }
-        const randomizeSelection = newSelectionRandomizer(exercises, parent);
-        randomize.addEventListener("click", randomizeSelection);
-        randomizeSelection();
+    const loadConfig = (path) => {
+        return fetch(path).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            else {
+                return Promise.reject(new Error(`Failed to load exercise list. ` +
+                    `${response.status} ${response.statusText} ${response.url}`));
+            }
+        });
+    };
+    const selectElement = (selector) => {
+        return new Promise((resolve, reject) => {
+            const element = document.querySelector(selector);
+            if (null !== element) {
+                resolve(element);
+            }
+            else {
+                reject(new Error(`Could not locate '${selector}' element`));
+            }
+        });
+    };
+    const init = (exercisesUrl, setIndex) => {
+        const promisedConfig = loadConfig(exercisesUrl);
+        const promisedListElem = selectElement("#exercise-list");
+        const promisedButton = selectElement("#randomize");
+        Promise
+            .all([promisedConfig, promisedListElem, promisedButton])
+            .then(([exercises, listElem, button]) => {
+            const randomizeSelection = newSelectionRandomizer(exercises[setIndex].choices, listElem);
+            button.addEventListener("click", randomizeSelection);
+            randomizeSelection();
+        });
     };
     return {
         init,

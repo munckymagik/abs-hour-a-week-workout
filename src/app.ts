@@ -25,20 +25,50 @@ const app = () => {
     });
   };
 
-  const init = (exercises: string[]) => {
-    const parent = document.querySelector("#exercise-list");
-    if (null === parent) {
-      throw new Error("Could not locate #exercise-list element");
-    }
+  interface IExerciseSet {
+    readonly type: string;
+    readonly nodes: string;
+    readonly choices: string[];
+  }
 
-    const randomize = document.querySelector("#randomize");
-    if (null === randomize) {
-      throw new Error("Could not locate #randomize element");
-    }
+  const loadConfig = (path: string): Promise<IExerciseSet[]> => {
+    return fetch(path).then((response: Response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return Promise.reject(
+          new Error(
+            `Failed to load exercise list. ` +
+            `${response.status} ${response.statusText} ${response.url}`,
+          ),
+        );
+      }
+    });
+  };
 
-    const randomizeSelection = newSelectionRandomizer(exercises, parent);
-    randomize.addEventListener("click", randomizeSelection);
-    randomizeSelection();
+  const selectElement = (selector: string): Promise<Element> => {
+    return new Promise((resolve, reject) => {
+      const element = document.querySelector(selector);
+      if (null !== element) {
+        resolve(element);
+      } else {
+        reject(new Error(`Could not locate '${selector}' element`));
+      }
+    });
+  };
+
+  const init = (exercisesUrl: string, setIndex: number) => {
+    const promisedConfig = loadConfig(exercisesUrl);
+    const promisedListElem = selectElement("#exercise-list");
+    const promisedButton = selectElement("#randomize");
+
+    Promise
+      .all([promisedConfig, promisedListElem, promisedButton])
+      .then(([exercises, listElem, button]) => {
+        const randomizeSelection = newSelectionRandomizer(exercises[setIndex].choices, listElem);
+        button.addEventListener("click", randomizeSelection);
+        randomizeSelection();
+      });
   };
 
   return {

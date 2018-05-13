@@ -8,19 +8,7 @@
   <link rel="stylesheet" href="style.css?v=2">
   <script src="app.js?v=3"></script>
   <script>
-    const EXERCISES = [
-      'Canoeing',
-      'Reverse cork screws',
-      'Upper circle crunch',
-      'Side plank',
-      'X-man plank',
-      'Heals to the heavens',
-      'Frog crunches',
-      'Pendulum planks',
-      'Russian twist'
-    ]
-
-    window.addEventListener('load', () => app(window).init(EXERCISES))
+    window.addEventListener('load', () => app().init("./exercises.json", 0));
   </script>
 </head>
 <body>

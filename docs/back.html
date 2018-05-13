@@ -8,19 +8,7 @@
   <link rel="stylesheet" href="style.css?v=2">
   <script src="app.js?v=3"></script>
   <script>
-    const EXERCISES = [
-      'Knees out hip extensions ',
-      'Bridge with leg extensions',
-      'Snow angels',
-      'Arm pulses',
-      'Back extensions',
-      'Good mornings',
-      'Light bar deadlift',
-      'One dumbbell bent over hold',
-      'Light bar bent over hold'
-    ]
-
-    window.addEventListener('load', () => app(window).init(EXERCISES))
+    window.addEventListener('load', () => app().init("./exercises.json", 1));
   </script>
 </head>
 <body>
