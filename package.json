@@ -1,0 +1,27 @@
+{
+  "name": "abs-hour-a-week-workout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "docs/app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "compile": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/munckymagik/abs-hour-a-week-workout.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/munckymagik/abs-hour-a-week-workout/issues"
+  },
+  "homepage": "https://github.com/munckymagik/abs-hour-a-week-workout#readme",
+  "devDependencies": {
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
+  }
+}
