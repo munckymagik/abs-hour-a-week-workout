@@ -1,7 +1,7 @@
 const app = () => {
   interface IExerciseSet {
     readonly title: string;
-    readonly nodes: string;
+    readonly notes: string;
     readonly choices: string[];
   }
 
@@ -73,30 +73,62 @@ const app = () => {
     });
   };
 
+  interface IUserInterface {
+    button: Element;
+    list: Element;
+    notes: Element;
+    selector: Element;
+  }
+
+  const initUI = (): Promise<IUserInterface> => {
+    const selectors = [
+      "#randomize",
+      "#exercise-list",
+      "#set-notes",
+      "#set-selector",
+    ];
+
+    return Promise.all(selectors.map(selectElement)).then((elements) => {
+      return {
+        button: elements[0],
+        list: elements[1],
+        notes: elements[2],
+        selector: elements[3],
+      };
+    });
+  };
+
   const init = (exercisesUrl: string, setIndex: number) => {
     const promisedConfig = loadConfig(exercisesUrl);
-    const promisedListElem = selectElement("#exercise-list");
-    const promisedSelector = selectElement("#set-selector");
-    const promisedButton = selectElement("#randomize");
+    const promisedUi = initUI();
 
     Promise
-      .all([promisedConfig, promisedListElem, promisedSelector, promisedButton])
-      .then(([exercises, listElem, selectElem, buttonElem]) => {
-        initExerciseSetSelector(selectElem, exercises);
+      .all([promisedConfig, promisedUi])
+      .then(([exercises, ui]) => {
+        initExerciseSetSelector(ui.selector, exercises);
 
-        let mutRefreshSelection = newSelectionRandomizer(exercises[0].choices, listElem);
+        let mutSelectedSet = exercises[0];
+        let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
 
-        selectElem.addEventListener("change", () => {
-          const selector = selectElem as HTMLSelectElement;
+        const update = () => {
+          ui.notes.innerHTML = mutSelectedSet.notes;
+          mutRefreshSelection();
+        };
+
+        ui.selector.addEventListener("change", () => {
+          const selector = ui.selector as HTMLSelectElement;
           const selectedOption = selector.options[selector.selectedIndex];
           const index = parseInt(selectedOption.value, 10);
-          mutRefreshSelection = newSelectionRandomizer(exercises[index].choices, listElem);
-          mutRefreshSelection();
+
+          mutSelectedSet = exercises[index];
+          mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+
+          update();
         });
 
-        buttonElem.addEventListener("click", () => { mutRefreshSelection(); });
+        ui.button.addEventListener("click", () => { mutRefreshSelection(); });
 
-        mutRefreshSelection();
+        update();
       });
   };
 
