@@ -2,12 +2,12 @@ main {
   font-size: 20pt;
   margin-bottom: 1em;
 }
-.selected {
-  text-decoration: underline;
-  font-weight: bold;
-}
 .big-button {
   font-size: 1.5em;
+}
+.select-list {
+  font-size: 1em;
+  width: 40%;
 }
 
 /* Portrait */
@@ -17,7 +17,7 @@ main {
   and (-webkit-min-device-pixel-ratio: 2)
   and (orientation: portrait)
 {
-  .big-button {
+  .form-elem {
     width: 100%;
   }
 }
