@@ -4,12 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Work outs</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Randomized exercise routines</title>
+  <link rel="stylesheet" href="style.css?v=2">
+  <script src="app.js?v=3"></script>
+  <script>
+    window.addEventListener('load', () => app().init("./exercises.json", 0));
+  </script>
 </head>
 <body>
-  <h1>Work outs</h1>
-  <h2><a href="abs.html">Abs workout</a></h2>
-  <h2><a href="back.html">Back workout</a></h2>
+  <main>
+    <select id="set-selector" class="form-elem select-list">
+      <option value="-1">Still loading ...</option>
+    </select>
+    <p>Today's 5 exercises:</p>
+    <ol id="exercise-list">
+      <li>Loading please wait.</li>
+    </ol>
+    <button id="randomize" class="form-elem big-button">Select again</button>
+  </main>
+  <footer id="set-notes">
+  </footer>
 </body>
 </html>
