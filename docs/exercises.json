@@ -1,16 +1,44 @@
 [
   {
-    "title": "Abs - hardgainer set",
-    "notes": "Based on <a href=\"https://youtu.be/drJ-D_uURIc\">ATHLEAN-X: The \"Hour a Week\" Ab Workout (FOLLOW ALONG!)</a>",
+    "title": "Abs hour a week - hardgainer set",
+    "notes": "Based on the hardgainer set from <a href=\"https://youtu.be/drJ-D_uURIc\">ATHLEAN-X: The \"Hour a Week\" Ab Workout (FOLLOW ALONG!)</a>",
     "choices": [
       "Canoeing",
       "Reverse cork screws",
       "Upper circle crunch",
       "Side plank",
+      "Side crunch",
       "X-man plank",
       "Heals to the heavens",
       "Frog crunches",
-      "Pendulum planks",
+      "Pendulum planks"
+    ]
+  },
+  {
+    "title": "Abs hour a week - advanced set",
+    "notes": "The advanced set from <a href=\"https://youtu.be/drJ-D_uURIc\">ATHLEAN-X: The \"Hour a Week\" Ab Workout (FOLLOW ALONG!)</a>",
+    "choices": [
+      "The figure 8",
+      "The side step through",
+      "Starfish crunch",
+      "Serratus side crunch",
+      "Chain saws",
+      "Twisting pistons",
+      "V-Up Russian twist",
+      "Triple crunch"
+    ]
+  },
+  {
+    "title": "Abs alt 1",
+    "notes": "An alternative selection of my own choosing.",
+    "choices": [
+      "Sit ups",
+      "Reverse cork screws",
+      "Crunches",
+      "Crunches - extend back w/ exercise ball",
+      "Side crunch",
+      "X-man plank",
+      "V up",
       "Russian twist"
     ]
   },
@@ -23,7 +51,7 @@
       "Snow angels",
       "Arm pulses",
       "Back extensions",
-      "Good mornings",
+      "Romanian dead lift",
       "Light bar deadlift",
       "One dumbbell bent over hold",
       "Light bar bent over hold"
