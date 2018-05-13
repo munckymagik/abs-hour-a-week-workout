@@ -7,5 +7,17 @@ main {
   font-weight: bold;
 }
 .big-button {
-  font-size: 2em;
+  font-size: 1.5em;
+}
+
+/* Portrait */
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait)
+{
+  .big-button {
+    width: 100%;
+  }
 }
