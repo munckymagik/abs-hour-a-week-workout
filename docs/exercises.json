@@ -56,5 +56,20 @@
       "One dumbbell bent over hold",
       "Light bar bent over hold"
     ]
+  },
+  {
+    "title": "Butt & leg exercises",
+    "notes": "",
+    "choices": [
+      "Knees out hip extensions",
+      "Single leg hip extensions",
+      "Bridge with leg extensions",
+      "Romanian dead lift",
+      "Deadlift",
+      "Sumo squat",
+      "Split squat",
+      "Lateral leg lift",
+      "Clamshells"
+    ]
   }
 ]
