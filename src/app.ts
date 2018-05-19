@@ -62,52 +62,36 @@ const app = () => {
     });
   };
 
-  interface IUserInterface {
-    button: Element;
-    list: Element;
-    notes: Element;
-    selector: Element;
-  }
+  class UserInterface {
+    get button(): Element {
+      return this.selectElement("#randomize");
+    }
 
-  type IUserInterfaceKey = keyof IUserInterface;
+    get list(): Element {
+      return this.selectElement("#exercise-list");
+    }
 
-  const uiKeysAndSelectors: Array<[IUserInterfaceKey, string]> = [
-    ["button", "#randomize"],
-    ["list", "#exercise-list"],
-    ["notes", "#set-notes"],
-    ["selector", "#set-selector"],
-  ];
+    get notes(): Element {
+      return this.selectElement("#set-notes");
+    }
 
-  const selectElement = (selector: string): Promise<Element> => {
-    return new Promise((resolve, reject) => {
+    get selector(): Element {
+      return this.selectElement("#set-selector");
+    }
+
+    private selectElement(selector: string): Element {
       const element = document.querySelector(selector);
       if (null !== element) {
-        resolve(element);
+        return element;
       } else {
-        reject(new Error(`Could not locate '${selector}' element`));
+        throw new Error(`Could not locate '${selector}' element`);
       }
-    });
-  };
-
-  const initUI = (): Promise<IUserInterface> => {
-    type KeyAndElement = [IUserInterfaceKey, Element];
-
-    const promisedKeysAndElements: Array<Promise<KeyAndElement>> =
-      uiKeysAndSelectors.map(([key, selector]): Promise<KeyAndElement> =>
-          selectElement(selector).then((element): KeyAndElement => [key, element]),
-      );
-
-    return Promise.all(promisedKeysAndElements).then((elements: KeyAndElement[]) => {
-      return elements.reduce((obj: any, [key, element]) => {
-        obj[key] = element;
-        return obj;
-      }, {}) as IUserInterface;
-    });
-  };
+    }
+  }
 
   const init = (exercisesUrl: string, setIndex: number) => {
     const promisedConfig = loadConfig(exercisesUrl);
-    const promisedUi = initUI();
+    const promisedUi = Promise.resolve(new UserInterface());
 
     Promise
       .all([promisedConfig, promisedUi])

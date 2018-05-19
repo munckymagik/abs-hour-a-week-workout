@@ -46,35 +46,32 @@ const app = () => {
             }
         });
     };
-    const uiKeysAndSelectors = [
-        ["button", "#randomize"],
-        ["list", "#exercise-list"],
-        ["notes", "#set-notes"],
-        ["selector", "#set-selector"],
-    ];
-    const selectElement = (selector) => {
-        return new Promise((resolve, reject) => {
+    class UserInterface {
+        get button() {
+            return this.selectElement("#randomize");
+        }
+        get list() {
+            return this.selectElement("#exercise-list");
+        }
+        get notes() {
+            return this.selectElement("#set-notes");
+        }
+        get selector() {
+            return this.selectElement("#set-selector");
+        }
+        selectElement(selector) {
             const element = document.querySelector(selector);
             if (null !== element) {
-                resolve(element);
+                return element;
             }
             else {
-                reject(new Error(`Could not locate '${selector}' element`));
+                throw new Error(`Could not locate '${selector}' element`);
             }
-        });
-    };
-    const initUI = () => {
-        const promisedKeysAndElements = uiKeysAndSelectors.map(([key, selector]) => selectElement(selector).then((element) => [key, element]));
-        return Promise.all(promisedKeysAndElements).then((elements) => {
-            return elements.reduce((obj, [key, element]) => {
-                obj[key] = element;
-                return obj;
-            }, {});
-        });
-    };
+        }
+    }
     const init = (exercisesUrl, setIndex) => {
         const promisedConfig = loadConfig(exercisesUrl);
-        const promisedUi = initUI();
+        const promisedUi = Promise.resolve(new UserInterface());
         Promise
             .all([promisedConfig, promisedUi])
             .then(([exercises, ui]) => {
