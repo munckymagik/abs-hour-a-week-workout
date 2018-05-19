@@ -75,8 +75,8 @@ const app = () => {
       return this.selectElement("#set-notes");
     }
 
-    get selector(): Element {
-      return this.selectElement("#set-selector");
+    get selector(): HTMLSelectElement {
+      return this.selectElement("#set-selector") as HTMLSelectElement;
     }
 
     private selectElement(selector: string): Element {
@@ -105,8 +105,7 @@ const app = () => {
       };
 
       ui.selector.addEventListener("change", () => {
-        const selector = ui.selector as HTMLSelectElement;
-        const selectedOption = selector.options[selector.selectedIndex];
+        const selectedOption = ui.selector.options[ui.selector.selectedIndex];
         const index = parseInt(selectedOption.value, 10);
 
         mutSelectedSet = exercises[index];

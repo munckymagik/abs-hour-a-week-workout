@@ -81,8 +81,7 @@ const app = () => {
                 mutRefreshSelection();
             };
             ui.selector.addEventListener("change", () => {
-                const selector = ui.selector;
-                const selectedOption = selector.options[selector.selectedIndex];
+                const selectedOption = ui.selector.options[ui.selector.selectedIndex];
                 const index = parseInt(selectedOption.value, 10);
                 mutSelectedSet = exercises[index];
                 mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
