@@ -26,15 +26,6 @@ const app = () => {
             parent.appendChild(newLi);
         });
     };
-    const initExerciseSetSelector = (selectElem, exerciseSets) => {
-        clearChildren(selectElem);
-        exerciseSets.forEach((exerciseSet, index) => {
-            const newOpt = document.createElement("option");
-            newOpt.innerHTML = exerciseSet.title;
-            newOpt.setAttribute("value", index.toString());
-            selectElem.appendChild(newOpt);
-        });
-    };
     const loadConfig = (path) => {
         return fetch(path).then((response) => {
             if (response.ok) {
@@ -48,18 +39,28 @@ const app = () => {
     };
     class UserInterface {
         get button() {
-            return this.selectElement("#randomize");
+            return this.queryElement("#randomize");
         }
         get list() {
-            return this.selectElement("#exercise-list");
+            return this.queryElement("#exercise-list");
         }
         get notes() {
-            return this.selectElement("#set-notes");
+            return this.queryElement("#set-notes");
         }
         get selector() {
-            return this.selectElement("#set-selector");
+            return this.queryElement("#set-selector");
         }
-        selectElement(selector) {
+        initExerciseSetSelector(exerciseSets) {
+            const selectorElement = this.selector;
+            clearChildren(selectorElement);
+            exerciseSets.forEach((exerciseSet, index) => {
+                const newOpt = document.createElement("option");
+                newOpt.innerHTML = exerciseSet.title;
+                newOpt.setAttribute("value", index.toString());
+                selectorElement.appendChild(newOpt);
+            });
+        }
+        queryElement(selector) {
             const element = document.querySelector(selector);
             if (null !== element) {
                 return element;
@@ -73,7 +74,7 @@ const app = () => {
         const promisedConfig = loadConfig(exercisesUrl);
         const ui = new UserInterface();
         promisedConfig.then((exercises) => {
-            initExerciseSetSelector(ui.selector, exercises);
+            ui.initExerciseSetSelector(exercises);
             let mutSelectedSet = exercises[0];
             let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
             const update = () => {

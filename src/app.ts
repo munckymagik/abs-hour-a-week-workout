@@ -35,18 +35,6 @@ const app = () => {
     });
   };
 
-  const initExerciseSetSelector = (selectElem: Element, exerciseSets: IExerciseSet[]) => {
-    clearChildren(selectElem);
-
-    exerciseSets.forEach((exerciseSet, index) => {
-      const newOpt = document.createElement("option");
-      newOpt.innerHTML = exerciseSet.title;
-      newOpt.setAttribute("value", index.toString());
-
-      selectElem.appendChild(newOpt);
-    });
-  };
-
   const loadConfig = (path: string): Promise<IExerciseSet[]> => {
     return fetch(path).then((response: Response) => {
       if (response.ok) {
@@ -64,22 +52,36 @@ const app = () => {
 
   class UserInterface {
     get button(): Element {
-      return this.selectElement("#randomize");
+      return this.queryElement("#randomize");
     }
 
     get list(): Element {
-      return this.selectElement("#exercise-list");
+      return this.queryElement("#exercise-list");
     }
 
     get notes(): Element {
-      return this.selectElement("#set-notes");
+      return this.queryElement("#set-notes");
     }
 
     get selector(): HTMLSelectElement {
-      return this.selectElement("#set-selector") as HTMLSelectElement;
+      return this.queryElement("#set-selector") as HTMLSelectElement;
     }
 
-    private selectElement(selector: string): Element {
+    public initExerciseSetSelector(exerciseSets: IExerciseSet[]) {
+      const selectorElement = this.selector;
+
+      clearChildren(selectorElement);
+
+      exerciseSets.forEach((exerciseSet, index) => {
+        const newOpt = document.createElement("option");
+        newOpt.innerHTML = exerciseSet.title;
+        newOpt.setAttribute("value", index.toString());
+
+        selectorElement.appendChild(newOpt);
+      });
+    }
+
+    private queryElement(selector: string): Element {
       const element = document.querySelector(selector);
       if (null !== element) {
         return element;
@@ -94,7 +96,7 @@ const app = () => {
     const ui = new UserInterface();
 
     promisedConfig.then((exercises) => {
-      initExerciseSetSelector(ui.selector, exercises);
+      ui.initExerciseSetSelector(exercises);
 
       let mutSelectedSet = exercises[0];
       let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
