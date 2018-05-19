@@ -91,35 +91,52 @@ const app = () => {
     }
   }
 
-  const init = (exercisesUrl: string, setIndex: number) => {
-    const promisedConfig = loadConfig(exercisesUrl);
-    const ui = new UserInterface();
+  class Application {
+    private ui: UserInterface;
+    private exercisesUrl: string;
 
-    promisedConfig.then((exercises) => {
-      ui.initExerciseSetSelector(exercises);
+    constructor(ui: UserInterface, exercisesUrl: string) {
+      this.ui = ui;
+      this.exercisesUrl = exercisesUrl;
+    }
 
-      let mutSelectedSet = exercises[0];
-      let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+    public run() {
+      const ui = this.ui;
 
-      const update = () => {
-        ui.notes.innerHTML = mutSelectedSet.notes;
-        mutRefreshSelection();
-      };
+      const promisedConfig = loadConfig(this.exercisesUrl);
 
-      ui.selector.addEventListener("change", () => {
-        const selectedOption = ui.selector.options[ui.selector.selectedIndex];
-        const index = parseInt(selectedOption.value, 10);
+      promisedConfig.then((exercises) => {
+        ui.initExerciseSetSelector(exercises);
 
-        mutSelectedSet = exercises[index];
-        mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+        let mutSelectedSet = exercises[0];
+        let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+
+        const update = () => {
+          ui.notes.innerHTML = mutSelectedSet.notes;
+          mutRefreshSelection();
+        };
+
+        ui.selector.addEventListener("change", () => {
+          const selectedOption = ui.selector.options[ui.selector.selectedIndex];
+          const index = parseInt(selectedOption.value, 10);
+
+          mutSelectedSet = exercises[index];
+          mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+
+          update();
+        });
+
+        ui.button.addEventListener("click", () => { mutRefreshSelection(); });
 
         update();
       });
+    }
+  }
 
-      ui.button.addEventListener("click", () => { mutRefreshSelection(); });
-
-      update();
-    });
+  const init = (exercisesUrl: string) => {
+    const ui = new UserInterface();
+    const application = new Application(ui, exercisesUrl);
+    application.run();
   };
 
   return {
