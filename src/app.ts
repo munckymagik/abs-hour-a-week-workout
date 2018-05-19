@@ -57,6 +57,18 @@ const app = () => {
       return this.queryElement("#set-selector") as HTMLSelectElement;
     }
 
+    public onSelectorChange(callback: (i: number) => void) {
+      this.selector.addEventListener("change", () => {
+        const selectedOption = this.selector.options[this.selector.selectedIndex];
+        const index = parseInt(selectedOption.value, 10);
+        callback(index);
+      });
+    }
+
+    public onButtonClick(callback: () => void) {
+      this.button.addEventListener("click", callback);
+    }
+
     public setExerciseList(exercises: string[]) {
       const listElem = this.list;
 
@@ -118,17 +130,14 @@ const app = () => {
         this.ui.setExerciseList(selectedExercises);
       };
 
-      this.ui.selector.addEventListener("change", () => {
-        const selectedOption = this.ui.selector.options[this.ui.selector.selectedIndex];
-        const index = parseInt(selectedOption.value, 10);
-
+      this.ui.onSelectorChange((index) => {
         mutSelectedSet = this.exerciseSets[index];
         mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
         update();
       });
 
-      this.ui.button.addEventListener("click", update);
+      this.ui.onButtonClick(update);
 
       update();
     }
