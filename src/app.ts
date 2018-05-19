@@ -41,20 +41,16 @@ const app = () => {
   };
 
   class UserInterface {
-    private get button(): Element {
-      return this.queryElement("#randomize");
-    }
+    private button: Element;
+    private list: Element;
+    private notes: Element;
+    private selector: HTMLSelectElement;
 
-    private get list(): Element {
-      return this.queryElement("#exercise-list");
-    }
-
-    private get notes(): Element {
-      return this.queryElement("#set-notes");
-    }
-
-    private get selector(): HTMLSelectElement {
-      return this.queryElement("#set-selector") as HTMLSelectElement;
+    constructor() {
+      this.button = this.queryElement("#randomize");
+      this.list = this.queryElement("#exercise-list");
+      this.notes = this.queryElement("#set-notes");
+      this.selector = this.queryElement("#set-selector") as HTMLSelectElement;
     }
 
     public onSelectorChange(callback: (i: number) => void) {

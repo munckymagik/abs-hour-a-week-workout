@@ -28,17 +28,11 @@ const app = () => {
         });
     };
     class UserInterface {
-        get button() {
-            return this.queryElement("#randomize");
-        }
-        get list() {
-            return this.queryElement("#exercise-list");
-        }
-        get notes() {
-            return this.queryElement("#set-notes");
-        }
-        get selector() {
-            return this.queryElement("#set-selector");
+        constructor() {
+            this.button = this.queryElement("#randomize");
+            this.list = this.queryElement("#exercise-list");
+            this.notes = this.queryElement("#set-notes");
+            this.selector = this.queryElement("#set-selector");
         }
         onSelectorChange(callback) {
             this.selector.addEventListener("change", () => {
