@@ -99,51 +99,47 @@ const app = () => {
 
   class Application {
     private ui: UserInterface;
-    private exercisesUrl: string;
+    private exercises: IExerciseSet[];
 
-    constructor(ui: UserInterface, exercisesUrl: string) {
+    constructor(ui: UserInterface, exercises: IExerciseSet[]) {
       this.ui = ui;
-      this.exercisesUrl = exercisesUrl;
+      this.exercises = exercises;
     }
 
     public run() {
-      const ui = this.ui;
+      this.ui.initExerciseSetSelector(this.exercises);
 
-      const promisedConfig = loadConfig(this.exercisesUrl);
+      let mutSelectedSet = this.exercises[0];
+      let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
-      promisedConfig.then((exercises) => {
-        ui.initExerciseSetSelector(exercises);
+      const update = () => {
+        this.ui.notes.innerHTML = mutSelectedSet.notes;
+        const selectedExercises = mutRefreshSelection();
+        this.ui.setExerciseList(selectedExercises);
+      };
 
-        let mutSelectedSet = exercises[0];
-        let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
+      this.ui.selector.addEventListener("change", () => {
+        const selectedOption = this.ui.selector.options[this.ui.selector.selectedIndex];
+        const index = parseInt(selectedOption.value, 10);
 
-        const update = () => {
-          ui.notes.innerHTML = mutSelectedSet.notes;
-          const selectedExercises = mutRefreshSelection();
-          ui.setExerciseList(selectedExercises);
-        };
-
-        ui.selector.addEventListener("change", () => {
-          const selectedOption = ui.selector.options[ui.selector.selectedIndex];
-          const index = parseInt(selectedOption.value, 10);
-
-          mutSelectedSet = exercises[index];
-          mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
-
-          update();
-        });
-
-        ui.button.addEventListener("click", update);
+        mutSelectedSet = this.exercises[index];
+        mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
         update();
       });
+
+      this.ui.button.addEventListener("click", update);
+
+      update();
     }
   }
 
   const init = (exercisesUrl: string) => {
-    const ui = new UserInterface();
-    const application = new Application(ui, exercisesUrl);
-    application.run();
+    loadConfig(exercisesUrl).then((exercises) => {
+      const ui = new UserInterface();
+      const application = new Application(ui, exercises);
+      application.run();
+    });
   };
 
   return {
