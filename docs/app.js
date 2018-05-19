@@ -71,10 +71,8 @@ const app = () => {
     }
     const init = (exercisesUrl, setIndex) => {
         const promisedConfig = loadConfig(exercisesUrl);
-        const promisedUi = Promise.resolve(new UserInterface());
-        Promise
-            .all([promisedConfig, promisedUi])
-            .then(([exercises, ui]) => {
+        const ui = new UserInterface();
+        promisedConfig.then((exercises) => {
             initExerciseSetSelector(ui.selector, exercises);
             let mutSelectedSet = exercises[0];
             let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);

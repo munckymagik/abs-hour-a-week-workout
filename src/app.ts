@@ -91,36 +91,34 @@ const app = () => {
 
   const init = (exercisesUrl: string, setIndex: number) => {
     const promisedConfig = loadConfig(exercisesUrl);
-    const promisedUi = Promise.resolve(new UserInterface());
+    const ui = new UserInterface();
 
-    Promise
-      .all([promisedConfig, promisedUi])
-      .then(([exercises, ui]) => {
-        initExerciseSetSelector(ui.selector, exercises);
+    promisedConfig.then((exercises) => {
+      initExerciseSetSelector(ui.selector, exercises);
 
-        let mutSelectedSet = exercises[0];
-        let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+      let mutSelectedSet = exercises[0];
+      let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
 
-        const update = () => {
-          ui.notes.innerHTML = mutSelectedSet.notes;
-          mutRefreshSelection();
-        };
+      const update = () => {
+        ui.notes.innerHTML = mutSelectedSet.notes;
+        mutRefreshSelection();
+      };
 
-        ui.selector.addEventListener("change", () => {
-          const selector = ui.selector as HTMLSelectElement;
-          const selectedOption = selector.options[selector.selectedIndex];
-          const index = parseInt(selectedOption.value, 10);
+      ui.selector.addEventListener("change", () => {
+        const selector = ui.selector as HTMLSelectElement;
+        const selectedOption = selector.options[selector.selectedIndex];
+        const index = parseInt(selectedOption.value, 10);
 
-          mutSelectedSet = exercises[index];
-          mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
-
-          update();
-        });
-
-        ui.button.addEventListener("click", () => { mutRefreshSelection(); });
+        mutSelectedSet = exercises[index];
+        mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
 
         update();
       });
+
+      ui.button.addEventListener("click", () => { mutRefreshSelection(); });
+
+      update();
+    });
   };
 
   return {
