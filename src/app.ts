@@ -99,17 +99,17 @@ const app = () => {
 
   class Application {
     private ui: UserInterface;
-    private exercises: IExerciseSet[];
+    private exerciseSets: IExerciseSet[];
 
     constructor(ui: UserInterface, exercises: IExerciseSet[]) {
       this.ui = ui;
-      this.exercises = exercises;
+      this.exerciseSets = exercises;
     }
 
     public run() {
-      this.ui.initExerciseSetSelector(this.exercises);
+      this.ui.initExerciseSetSelector(this.exerciseSets);
 
-      let mutSelectedSet = this.exercises[0];
+      let mutSelectedSet = this.exerciseSets[0];
       let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
       const update = () => {
@@ -122,7 +122,7 @@ const app = () => {
         const selectedOption = this.ui.selector.options[this.ui.selector.selectedIndex];
         const index = parseInt(selectedOption.value, 10);
 
-        mutSelectedSet = this.exercises[index];
+        mutSelectedSet = this.exerciseSets[index];
         mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
         update();
@@ -135,9 +135,9 @@ const app = () => {
   }
 
   const init = (exercisesUrl: string) => {
-    loadConfig(exercisesUrl).then((exercises) => {
+    loadConfig(exercisesUrl).then((exerciseSets) => {
       const ui = new UserInterface();
-      const application = new Application(ui, exercises);
+      const application = new Application(ui, exerciseSets);
       application.run();
     });
   };

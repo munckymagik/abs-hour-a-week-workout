@@ -77,11 +77,11 @@ const app = () => {
     class Application {
         constructor(ui, exercises) {
             this.ui = ui;
-            this.exercises = exercises;
+            this.exerciseSets = exercises;
         }
         run() {
-            this.ui.initExerciseSetSelector(this.exercises);
-            let mutSelectedSet = this.exercises[0];
+            this.ui.initExerciseSetSelector(this.exerciseSets);
+            let mutSelectedSet = this.exerciseSets[0];
             let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
             const update = () => {
                 this.ui.notes.innerHTML = mutSelectedSet.notes;
@@ -91,7 +91,7 @@ const app = () => {
             this.ui.selector.addEventListener("change", () => {
                 const selectedOption = this.ui.selector.options[this.ui.selector.selectedIndex];
                 const index = parseInt(selectedOption.value, 10);
-                mutSelectedSet = this.exercises[index];
+                mutSelectedSet = this.exerciseSets[index];
                 mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
                 update();
             });
@@ -100,9 +100,9 @@ const app = () => {
         }
     }
     const init = (exercisesUrl) => {
-        loadConfig(exercisesUrl).then((exercises) => {
+        loadConfig(exercisesUrl).then((exerciseSets) => {
             const ui = new UserInterface();
-            const application = new Application(ui, exercises);
+            const application = new Application(ui, exerciseSets);
             application.run();
         });
     };
