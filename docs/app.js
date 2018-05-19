@@ -8,23 +8,13 @@ const app = () => {
         }
         return a;
     }
-    const clearChildren = (parent) => {
-        while (parent.firstChild) {
-            parent.removeChild(parent.firstChild);
-        }
-    };
-    const newSelectionRandomizer = (exercises, parent) => () => {
-        clearChildren(parent);
+    const newSelectionRandomizer = (exercises) => () => {
         // Make a copy so we don't mutate the original
         const selectedExercises = exercises.map((e) => e);
         // Now shuffle the copy
         shuffle(selectedExercises);
         // Select 5 exercises
-        selectedExercises.slice(0, 5).forEach((exerciseName) => {
-            const newLi = document.createElement("li");
-            newLi.innerHTML = exerciseName;
-            parent.appendChild(newLi);
-        });
+        return selectedExercises.slice(0, 5);
     };
     const loadConfig = (path) => {
         return fetch(path).then((response) => {
@@ -50,9 +40,18 @@ const app = () => {
         get selector() {
             return this.queryElement("#set-selector");
         }
+        setExerciseList(exercises) {
+            const listElem = this.list;
+            this.clearChildren(listElem);
+            exercises.forEach((exerciseName) => {
+                const newLi = document.createElement("li");
+                newLi.innerHTML = exerciseName;
+                listElem.appendChild(newLi);
+            });
+        }
         initExerciseSetSelector(exerciseSets) {
             const selectorElement = this.selector;
-            clearChildren(selectorElement);
+            this.clearChildren(selectorElement);
             exerciseSets.forEach((exerciseSet, index) => {
                 const newOpt = document.createElement("option");
                 newOpt.innerHTML = exerciseSet.title;
@@ -69,6 +68,11 @@ const app = () => {
                 throw new Error(`Could not locate '${selector}' element`);
             }
         }
+        clearChildren(parent) {
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+        }
     }
     class Application {
         constructor(ui, exercisesUrl) {
@@ -81,19 +85,20 @@ const app = () => {
             promisedConfig.then((exercises) => {
                 ui.initExerciseSetSelector(exercises);
                 let mutSelectedSet = exercises[0];
-                let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+                let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
                 const update = () => {
                     ui.notes.innerHTML = mutSelectedSet.notes;
-                    mutRefreshSelection();
+                    const selectedExercises = mutRefreshSelection();
+                    ui.setExerciseList(selectedExercises);
                 };
                 ui.selector.addEventListener("change", () => {
                     const selectedOption = ui.selector.options[ui.selector.selectedIndex];
                     const index = parseInt(selectedOption.value, 10);
                     mutSelectedSet = exercises[index];
-                    mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+                    mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
                     update();
                 });
-                ui.button.addEventListener("click", () => { mutRefreshSelection(); });
+                ui.button.addEventListener("click", update);
                 update();
             });
         }

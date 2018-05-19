@@ -14,13 +14,7 @@ const app = () => {
     return a;
   }
 
-  const clearChildren = (parent: Node) => {
-    while (parent.firstChild) { parent.removeChild(parent.firstChild); }
-  };
-
-  const newSelectionRandomizer = (exercises: string[], parent: Node) => () => {
-    clearChildren(parent);
-
+  const newSelectionRandomizer = (exercises: string[]) => (): string[] => {
     // Make a copy so we don't mutate the original
     const selectedExercises = exercises.map((e) => e);
 
@@ -28,11 +22,7 @@ const app = () => {
     shuffle(selectedExercises);
 
     // Select 5 exercises
-    selectedExercises.slice(0, 5).forEach((exerciseName) => {
-      const newLi = document.createElement("li");
-      newLi.innerHTML = exerciseName;
-      parent.appendChild(newLi);
-    });
+    return selectedExercises.slice(0, 5);
   };
 
   const loadConfig = (path: string): Promise<IExerciseSet[]> => {
@@ -67,10 +57,22 @@ const app = () => {
       return this.queryElement("#set-selector") as HTMLSelectElement;
     }
 
+    public setExerciseList(exercises: string[]) {
+      const listElem = this.list;
+
+      this.clearChildren(listElem);
+
+      exercises.forEach((exerciseName) => {
+        const newLi = document.createElement("li");
+        newLi.innerHTML = exerciseName;
+        listElem.appendChild(newLi);
+      });
+    }
+
     public initExerciseSetSelector(exerciseSets: IExerciseSet[]) {
       const selectorElement = this.selector;
 
-      clearChildren(selectorElement);
+      this.clearChildren(selectorElement);
 
       exerciseSets.forEach((exerciseSet, index) => {
         const newOpt = document.createElement("option");
@@ -88,6 +90,10 @@ const app = () => {
       } else {
         throw new Error(`Could not locate '${selector}' element`);
       }
+    }
+
+    private clearChildren(parent: Node) {
+      while (parent.firstChild) { parent.removeChild(parent.firstChild); }
     }
   }
 
@@ -109,11 +115,12 @@ const app = () => {
         ui.initExerciseSetSelector(exercises);
 
         let mutSelectedSet = exercises[0];
-        let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+        let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
         const update = () => {
           ui.notes.innerHTML = mutSelectedSet.notes;
-          mutRefreshSelection();
+          const selectedExercises = mutRefreshSelection();
+          ui.setExerciseList(selectedExercises);
         };
 
         ui.selector.addEventListener("change", () => {
@@ -121,12 +128,12 @@ const app = () => {
           const index = parseInt(selectedOption.value, 10);
 
           mutSelectedSet = exercises[index];
-          mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices, ui.list);
+          mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
           update();
         });
 
-        ui.button.addEventListener("click", () => { mutRefreshSelection(); });
+        ui.button.addEventListener("click", update);
 
         update();
       });
