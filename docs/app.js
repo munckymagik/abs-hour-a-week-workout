@@ -50,6 +50,9 @@ const app = () => {
         onButtonClick(callback) {
             this.button.addEventListener("click", callback);
         }
+        setNotes(notes) {
+            this.notes.innerHTML = notes;
+        }
         setExerciseList(exercises) {
             const listElem = this.list;
             this.clearChildren(listElem);
@@ -94,7 +97,7 @@ const app = () => {
             let mutSelectedSet = this.exerciseSets[0];
             let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
             const update = () => {
-                this.ui.notes.innerHTML = mutSelectedSet.notes;
+                this.ui.setNotes(mutSelectedSet.notes);
                 const selectedExercises = mutRefreshSelection();
                 this.ui.setExerciseList(selectedExercises);
             };

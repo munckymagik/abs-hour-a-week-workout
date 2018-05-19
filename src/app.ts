@@ -41,19 +41,19 @@ const app = () => {
   };
 
   class UserInterface {
-    get button(): Element {
+    private get button(): Element {
       return this.queryElement("#randomize");
     }
 
-    get list(): Element {
+    private get list(): Element {
       return this.queryElement("#exercise-list");
     }
 
-    get notes(): Element {
+    private get notes(): Element {
       return this.queryElement("#set-notes");
     }
 
-    get selector(): HTMLSelectElement {
+    private get selector(): HTMLSelectElement {
       return this.queryElement("#set-selector") as HTMLSelectElement;
     }
 
@@ -67,6 +67,10 @@ const app = () => {
 
     public onButtonClick(callback: () => void) {
       this.button.addEventListener("click", callback);
+    }
+
+    public setNotes(notes: string) {
+      this.notes.innerHTML = notes;
     }
 
     public setExerciseList(exercises: string[]) {
@@ -125,7 +129,7 @@ const app = () => {
       let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
 
       const update = () => {
-        this.ui.notes.innerHTML = mutSelectedSet.notes;
+        this.ui.setNotes(mutSelectedSet.notes);
         const selectedExercises = mutRefreshSelection();
         this.ui.setExerciseList(selectedExercises);
       };
