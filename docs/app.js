@@ -46,6 +46,12 @@ const app = () => {
             }
         });
     };
+    const uiKeysAndSelectors = [
+        ["button", "#randomize"],
+        ["list", "#exercise-list"],
+        ["notes", "#set-notes"],
+        ["selector", "#set-selector"],
+    ];
     const selectElement = (selector) => {
         return new Promise((resolve, reject) => {
             const element = document.querySelector(selector);
@@ -58,19 +64,12 @@ const app = () => {
         });
     };
     const initUI = () => {
-        const selectors = [
-            "#randomize",
-            "#exercise-list",
-            "#set-notes",
-            "#set-selector",
-        ];
-        return Promise.all(selectors.map(selectElement)).then((elements) => {
-            return {
-                button: elements[0],
-                list: elements[1],
-                notes: elements[2],
-                selector: elements[3],
-            };
+        const promisedKeysAndElements = uiKeysAndSelectors.map(([key, selector]) => selectElement(selector).then((element) => [key, element]));
+        return Promise.all(promisedKeysAndElements).then((elements) => {
+            return elements.reduce((obj, [key, element]) => {
+                obj[key] = element;
+                return obj;
+            }, {});
         });
     };
     const init = (exercisesUrl, setIndex) => {

@@ -62,6 +62,22 @@ const app = () => {
     });
   };
 
+  interface IUserInterface {
+    button: Element;
+    list: Element;
+    notes: Element;
+    selector: Element;
+  }
+
+  type IUserInterfaceKey = keyof IUserInterface;
+
+  const uiKeysAndSelectors: Array<[IUserInterfaceKey, string]> = [
+    ["button", "#randomize"],
+    ["list", "#exercise-list"],
+    ["notes", "#set-notes"],
+    ["selector", "#set-selector"],
+  ];
+
   const selectElement = (selector: string): Promise<Element> => {
     return new Promise((resolve, reject) => {
       const element = document.querySelector(selector);
@@ -73,28 +89,19 @@ const app = () => {
     });
   };
 
-  interface IUserInterface {
-    button: Element;
-    list: Element;
-    notes: Element;
-    selector: Element;
-  }
-
   const initUI = (): Promise<IUserInterface> => {
-    const selectors = [
-      "#randomize",
-      "#exercise-list",
-      "#set-notes",
-      "#set-selector",
-    ];
+    type KeyAndElement = [IUserInterfaceKey, Element];
 
-    return Promise.all(selectors.map(selectElement)).then((elements) => {
-      return {
-        button: elements[0],
-        list: elements[1],
-        notes: elements[2],
-        selector: elements[3],
-      };
+    const promisedKeysAndElements: Array<Promise<KeyAndElement>> =
+      uiKeysAndSelectors.map(([key, selector]): Promise<KeyAndElement> =>
+          selectElement(selector).then((element): KeyAndElement => [key, element]),
+      );
+
+    return Promise.all(promisedKeysAndElements).then((elements: KeyAndElement[]) => {
+      return elements.reduce((obj: any, [key, element]) => {
+        obj[key] = element;
+        return obj;
+      }, {}) as IUserInterface;
     });
   };
 
