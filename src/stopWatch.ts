@@ -36,6 +36,7 @@ class StopWatch {
     }, this.frameInterval);
 
     this.startButton.innerHTML = "Stop";
+    this.resetbutton.setAttribute("disabled", "true");
   }
 
   private stop() {
@@ -44,6 +45,7 @@ class StopWatch {
       this.intervalId = undefined;
 
       this.startButton.innerHTML = "Start";
+      this.resetbutton.removeAttribute("disabled");
     }
   }
 
@@ -53,6 +55,7 @@ class StopWatch {
 
   private reset() {
     this.startTimeMillis = 0;
+    this.display.innerHTML = "00:00:00";
   }
 
   private update() {
