@@ -1,6 +1,6 @@
 import { queryElement } from "./domHelpers";
 
-const pad = (n: number) => ("00" + n).slice(-2);
+const zeroPad = (n: number) => ("00" + n).slice(-2);
 
 class StopWatch {
   private display: Element;
@@ -42,8 +42,7 @@ class StopWatch {
       self.update();
     }, this.frameInterval);
 
-    this.startButton.innerHTML = "Stop";
-    this.resetbutton.setAttribute("disabled", "true");
+    this.renderButtons();
   }
 
   private stop() {
@@ -53,8 +52,7 @@ class StopWatch {
 
       this.stopTimeMillis = Date.now();
 
-      this.startButton.innerHTML = "Start";
-      this.resetbutton.removeAttribute("disabled");
+      this.renderButtons();
     }
   }
 
@@ -65,7 +63,8 @@ class StopWatch {
   private reset() {
     this.startTimeMillis = 0;
     this.stopTimeMillis = 0;
-    this.display.innerHTML = "00:00:00";
+
+    this.renderDisplay(0, 0, 0);
   }
 
   private update() {
@@ -75,7 +74,21 @@ class StopWatch {
     const seconds = Math.floor((delta % 60000) / 1000);
     const centiseconds = Math.floor((delta % 1000) / 10);
 
-    this.display.innerHTML = `${pad(minutes)}:${pad(seconds)}:${pad(centiseconds)}`;
+    this.renderDisplay(minutes, seconds, centiseconds);
+  }
+
+  private renderDisplay(mins: number, secs: number, centis: number) {
+    this.display.innerHTML = `${zeroPad(mins)}:${zeroPad(secs)}:${zeroPad(centis)}`;
+  }
+
+  private renderButtons() {
+    if (this.isStarted()) {
+      this.startButton.innerHTML = "Stop";
+      this.resetbutton.setAttribute("disabled", "true");
+    } else {
+      this.startButton.innerHTML = "Start";
+      this.resetbutton.removeAttribute("disabled");
+    }
   }
 }
 
