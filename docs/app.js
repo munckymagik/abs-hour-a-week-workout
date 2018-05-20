@@ -85,23 +85,25 @@ const app = () => {
         constructor(ui, exercises) {
             this.ui = ui;
             this.exerciseSets = exercises;
+            this.selectedSet = this.exerciseSets[0];
+            this.refreshSelection = newSelectionRandomizer(this.selectedSet.choices);
         }
         run() {
             this.ui.initExerciseSetSelector(this.exerciseSets);
-            let mutSelectedSet = this.exerciseSets[0];
-            let mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
-            const update = () => {
-                this.ui.setNotes(mutSelectedSet.notes);
-                const selectedExercises = mutRefreshSelection();
-                this.ui.setExerciseList(selectedExercises);
-            };
             this.ui.onSelectorChange((index) => {
-                mutSelectedSet = this.exerciseSets[index];
-                mutRefreshSelection = newSelectionRandomizer(mutSelectedSet.choices);
-                update();
+                this.setState(index);
+                this.update();
             });
-            this.ui.onButtonClick(update);
-            update();
+            this.ui.onButtonClick(() => this.update());
+            this.update();
+        }
+        update() {
+            this.ui.setNotes(this.selectedSet.notes);
+            this.ui.setExerciseList(this.refreshSelection());
+        }
+        setState(selectedIndex) {
+            this.selectedSet = this.exerciseSets[selectedIndex];
+            this.refreshSelection = newSelectionRandomizer(this.selectedSet.choices);
         }
     }
     const init = (exercisesUrl) => {
