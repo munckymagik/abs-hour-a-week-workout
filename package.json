@@ -2,7 +2,7 @@
   "name": "abs-hour-a-week-workout",
   "version": "1.0.0",
   "description": "",
-  "main": "docs/app.js",
+  "private": true,
   "directories": {
     "doc": "docs"
   },
