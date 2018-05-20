@@ -2,35 +2,57 @@ import { queryElement } from "./domHelpers";
 
 class StopWatch {
   private display: Element;
-  private stop: Element;
-  private start: Element;
-  private reset: Element;
+  private startButton: Element;
+  private resetbutton: Element;
+
+  private frameInterval: number = Math.floor(1000 / 30);
 
   private startTimeMillis: number = 0;
   private intervalId?: number;
 
   constructor(selectorPrefix: string) {
     this.display = queryElement(`.${selectorPrefix}-display`);
-    this.start = queryElement(`.${selectorPrefix}-start`);
-    this.stop = queryElement(`.${selectorPrefix}-stop`);
-    this.reset = queryElement(`.${selectorPrefix}-reset`);
+    this.startButton = queryElement(`.${selectorPrefix}-start`);
+    this.resetbutton = queryElement(`.${selectorPrefix}-reset`);
+
+    this.startButton.addEventListener("click", () => this.toggleState());
+    this.resetbutton.addEventListener("click", () => this.reset());
+  }
+
+  private toggleState() {
+    if (this.isStarted()) {
+      this.stop();
+    } else {
+      this.start();
+    }
+  }
+
+  private start() {
+    this.startTimeMillis = Date.now();
 
     const self = this;
+    this.intervalId = setInterval(() => {
+      self.update();
+    }, this.frameInterval);
 
-    this.start.addEventListener("click", () => {
-      self.startTimeMillis = Date.now();
-      self.intervalId = setInterval(() => {
-        self.update();
-      }, Math.floor(1000 / 30));
-    });
-    this.stop.addEventListener("click", () => {
-      if (self.intervalId) {
-        clearInterval(self.intervalId);
-      }
-    });
-    this.reset.addEventListener("click", () => {
-      self.startTimeMillis = 0;
-    });
+    this.startButton.innerHTML = "Stop";
+  }
+
+  private stop() {
+    if (this.isStarted()) {
+      clearInterval(this.intervalId);
+      this.intervalId = undefined;
+
+      this.startButton.innerHTML = "Start";
+    }
+  }
+
+  private isStarted() {
+    return typeof this.intervalId !== "undefined";
+  }
+
+  private reset() {
+    this.startTimeMillis = 0;
   }
 
   private update() {
