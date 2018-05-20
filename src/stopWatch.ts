@@ -3,6 +3,7 @@ import { queryElement } from "./domHelpers";
 const zeroPad = (n: number) => ("00" + n).slice(-2);
 
 class StopWatch {
+  private container: Element;
   private display: Element;
   private startButton: Element;
   private resetbutton: Element;
@@ -14,12 +15,16 @@ class StopWatch {
   private intervalId?: number;
 
   constructor(selectorPrefix: string) {
+    this.container = queryElement(`#${selectorPrefix}`);
     this.display = queryElement(`.${selectorPrefix}-display`);
     this.startButton = queryElement(`.${selectorPrefix}-start`);
     this.resetbutton = queryElement(`.${selectorPrefix}-reset`);
 
-    this.startButton.addEventListener("click", () => this.toggleState());
-    this.resetbutton.addEventListener("click", () => this.reset());
+    this.container.addEventListener("click", () => this.toggleState());
+    this.resetbutton.addEventListener("click", (ev: Event) => {
+      ev.stopPropagation();
+      this.reset();
+    });
   }
 
   private toggleState() {
