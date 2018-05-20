@@ -1,5 +1,7 @@
 import { queryElement } from "./domHelpers";
 
+const pad = (n: number) => ("00" + n).slice(-2);
+
 class StopWatch {
   private display: Element;
   private startButton: Element;
@@ -8,6 +10,7 @@ class StopWatch {
   private frameInterval: number = Math.floor(1000 / 30);
 
   private startTimeMillis: number = 0;
+  private stopTimeMillis: number = 0;
   private intervalId?: number;
 
   constructor(selectorPrefix: string) {
@@ -28,7 +31,11 @@ class StopWatch {
   }
 
   private start() {
-    this.startTimeMillis = Date.now();
+    if (this.stopTimeMillis === 0) {
+      this.startTimeMillis = Date.now();
+    } else {
+      this.startTimeMillis += Date.now() - this.stopTimeMillis;
+    }
 
     const self = this;
     this.intervalId = setInterval(() => {
@@ -44,6 +51,8 @@ class StopWatch {
       clearInterval(this.intervalId);
       this.intervalId = undefined;
 
+      this.stopTimeMillis = Date.now();
+
       this.startButton.innerHTML = "Start";
       this.resetbutton.removeAttribute("disabled");
     }
@@ -55,15 +64,17 @@ class StopWatch {
 
   private reset() {
     this.startTimeMillis = 0;
+    this.stopTimeMillis = 0;
     this.display.innerHTML = "00:00:00";
   }
 
   private update() {
-    const pad = (n: number) => ("00" + n).slice(-2);
     const delta = Date.now() - this.startTimeMillis;
+
     const minutes = Math.floor(delta / 60000);
     const seconds = Math.floor((delta % 60000) / 1000);
     const centiseconds = Math.floor((delta % 1000) / 10);
+
     this.display.innerHTML = `${pad(minutes)}:${pad(seconds)}:${pad(centiseconds)}`;
   }
 }
