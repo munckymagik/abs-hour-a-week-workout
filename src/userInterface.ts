@@ -1,4 +1,5 @@
 import { IExerciseSet } from "./data";
+import { clearChildren, queryElement } from "./domHelpers";
 
 class UserInterface {
   private button: Element;
@@ -7,10 +8,10 @@ class UserInterface {
   private selector: HTMLSelectElement;
 
   constructor() {
-    this.button = this.queryElement("#randomize");
-    this.list = this.queryElement("#exercise-list");
-    this.notes = this.queryElement("#set-notes");
-    this.selector = this.queryElement("#set-selector") as HTMLSelectElement;
+    this.button = queryElement("#randomize");
+    this.list = queryElement("#exercise-list");
+    this.notes = queryElement("#set-notes");
+    this.selector = queryElement("#set-selector") as HTMLSelectElement;
   }
 
   public onSelectorChange(callback: (i: number) => void) {
@@ -32,7 +33,7 @@ class UserInterface {
   public setExerciseList(exercises: string[]) {
     const listElem = this.list;
 
-    this.clearChildren(listElem);
+    clearChildren(listElem);
 
     exercises.forEach((exerciseName) => {
       const newLi = document.createElement("li");
@@ -44,7 +45,7 @@ class UserInterface {
   public initExerciseSetSelector(exerciseSets: IExerciseSet[]) {
     const selectorElement = this.selector;
 
-    this.clearChildren(selectorElement);
+    clearChildren(selectorElement);
 
     exerciseSets.forEach((exerciseSet, index) => {
       const newOpt = document.createElement("option");
@@ -53,19 +54,6 @@ class UserInterface {
 
       selectorElement.appendChild(newOpt);
     });
-  }
-
-  private queryElement(selector: string): Element {
-    const element = document.querySelector(selector);
-    if (null !== element) {
-      return element;
-    } else {
-      throw new Error(`Could not locate '${selector}' element`);
-    }
-  }
-
-  private clearChildren(parent: Node) {
-    while (parent.firstChild) { parent.removeChild(parent.firstChild); }
   }
 }
 
