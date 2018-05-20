@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Randomized exercise routines</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
   <script src="bundle.js?v=1"></script>
 </head>
 <body>
@@ -13,12 +13,19 @@
     <select id="set-selector" class="form-elem select-list">
       <option value="-1">Still loading ...</option>
     </select>
-    <p>Today's 5 exercises:</p>
     <ol id="exercise-list">
       <li>Loading please wait.</li>
     </ol>
     <button id="randomize" class="form-elem big-button">Select again</button>
   </main>
+  <div id="stopwatch" class="hidden">
+    <output class="stopwatch-display">00:00:00</output>
+    <div>
+      <button class="stopwatch-start big-button">Start</button>
+      <button class="stopwatch-stop big-button">Stop</button>
+      <button class="stopwatch-reset big-button">Reset</button>
+    </div>
+  </div>
   <footer id="set-notes">
   </footer>
 </body>
