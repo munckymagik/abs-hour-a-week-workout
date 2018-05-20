@@ -2,12 +2,27 @@ main {
   font-size: 20pt;
   margin-bottom: 1em;
 }
+
 .big-button {
-  font-size: 1.5em;
+  font-size: 1.5rem;
 }
+
 .select-list {
   font-size: 1em;
   width: 40%;
+}
+
+#stopwatch {
+  width: 100%;
+  background-color: azure;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.stopwatch-display {
+  display: block;
+  width: 100%;
+  font-size: 4em;
 }
 
 /* Portrait */
