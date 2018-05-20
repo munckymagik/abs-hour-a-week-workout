@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "compile": "tsc -p .",
+    "compile": "webpack",
     "serve": "serve ./docs/"
   },
   "repository": {
@@ -23,7 +23,10 @@
   "homepage": "https://github.com/munckymagik/abs-hour-a-week-workout#readme",
   "devDependencies": {
     "serve": "6.5.6",
+    "ts-loader": "4.3.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "webpack": "4.8.3",
+    "webpack-cli": "2.1.3"
   }
 }

@@ -2,14 +2,14 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "listEmittedFiles": true,
-    "module": "amd",
+    "module": "es6",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
-    "outFile": "docs/app.js",
+    "outDir": "./docs/",
     "pretty": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2016"
+    "target": "es6"
   },
   "include": [
     "./src/"
