@@ -71,5 +71,23 @@
       "Lateral leg lift",
       "Clamshells"
     ]
+  },
+  {
+    "title": "Cardio",
+    "notes": "",
+    "choices": [
+      "Battling the rope",
+      "Burpees",
+      "Explosive bent over row",
+      "Explosive push-ups",
+      "Explosive shoulder press",
+      "High knees",
+      "Forward lunges",
+      "Backward lunges",
+      "Dips",
+      "Push pull thing",
+      "Squats",
+      "Step ups"
+    ]
   }
 ]
