@@ -23,3 +23,14 @@ jobs:
         npm run compile
       env:
         CI: true
+    - name: Add generated bundle & commit
+      uses: EndBug/add-and-commit@v2.3.0
+      with: # See more info about inputs below
+        author_name: Workflow user
+        author_email: munckfish@gmail.com
+        message: "Updated bundle.js"
+        path: "docs/bundle.js"
+        pattern: "*.js"
+        force: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
