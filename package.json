@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/munckymagik/abs-hour-a-week-workout#readme",
   "devDependencies": {
-    "serve": "^11.2.0",
+    "serve": "^11.3.0",
     "ts-loader": "6.2.1",
     "tslint": "^5.20.1",
     "typescript": "^3.7.3",
